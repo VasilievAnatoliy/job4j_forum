@@ -1,13 +1,24 @@
 package ru.job4j.forum.model;
 
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Objects;
 
+@Entity
+@Table(name = "comments")
 public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String text;
-    private Calendar created;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar created = Calendar.getInstance();
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    Post post;
 
     public static Comment of(String text, User user) {
         Comment comment = new Comment();
@@ -47,6 +58,14 @@ public class Comment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     @Override

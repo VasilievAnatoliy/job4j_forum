@@ -6,7 +6,7 @@ import ru.job4j.forum.model.Authority;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
+/*@Repository*/
 public class AuthorityMem {
     private final Map<Integer, Authority> authority = new ConcurrentHashMap<>();
 

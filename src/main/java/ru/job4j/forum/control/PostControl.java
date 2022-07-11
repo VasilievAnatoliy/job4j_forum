@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.forum.model.Comment;
 import ru.job4j.forum.model.Post;
+import ru.job4j.forum.service.CommentService;
 import ru.job4j.forum.service.PostService;
 import ru.job4j.forum.service.UserService;
 
@@ -15,10 +16,13 @@ import ru.job4j.forum.service.UserService;
 public class PostControl {
     private final PostService postService;
     private final UserService userService;
+    private final CommentService commentService;
 
-    public PostControl(PostService postService, UserService userService) {
+    public PostControl(PostService postService, UserService userService,
+                       CommentService commentService) {
         this.postService = postService;
         this.userService = userService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/post/{postId}")
@@ -62,11 +66,11 @@ public class PostControl {
 
    @PostMapping("/saveComment")
    public String saveComment(@ModelAttribute Comment comment,
-                             @RequestParam("postId") int id) {
-       Post post = postService.findById(id);
-       comment.setUser(userService.findByUsername(comment.getUser().getUsername()));
-       post.addComment(comment);
-       postService.save(post);
+                             @RequestParam("postId") int id,
+                             @AuthenticationPrincipal User user) {
+       comment.setPost(postService.findById(id));
+       comment.setUser(userService.findByUsername(user.getUsername()));
+       commentService.save(comment);
        return "redirect:/post/" + id;
    }
 }

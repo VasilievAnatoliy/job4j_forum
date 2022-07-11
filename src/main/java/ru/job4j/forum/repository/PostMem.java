@@ -7,7 +7,7 @@ import ru.job4j.forum.model.Post;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
+/*@Repository*/
 public class PostMem {
     private final UserMem userMem;
 

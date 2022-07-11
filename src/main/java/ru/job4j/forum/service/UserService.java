@@ -3,14 +3,15 @@ package ru.job4j.forum.service;
 import org.springframework.stereotype.Service;
 import ru.job4j.forum.model.User;
 import ru.job4j.forum.repository.UserMem;
+import ru.job4j.forum.store.UserRepository;
 
 import java.util.Collection;
 
 @Service
 public class UserService {
-    private final UserMem users;
+    private final UserRepository users;
 
-    public UserService(UserMem users) {
+    public UserService(UserRepository users) {
         this.users = users;
     }
 
@@ -18,15 +19,7 @@ public class UserService {
        return users.save(user);
     }
 
-    public User findById(int id) {
-        return users.findById(id);
-    }
-
     public User findByUsername(String name) {
         return users.findByUsername(name);
-    }
-
-    public Collection<User> findAll() {
-        return users.findAll();
     }
 }

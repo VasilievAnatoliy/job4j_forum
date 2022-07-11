@@ -2,12 +2,16 @@ package ru.job4j.forum.control;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.forum.model.User;
 import ru.job4j.forum.service.AuthorityService;
 import ru.job4j.forum.service.UserService;
+
+import java.util.Optional;
 
 @Controller
 public class RegControl {
@@ -27,13 +31,17 @@ public class RegControl {
     public String regSave(@ModelAttribute User user) {
         user.setEnabled(true);
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setAuthority(authorities.findByAuthority("USER"));
-        users.save(user);
+        user.setAuthority(authorities.findByAuthority("ROLE_USER"));
+        Optional<User> regUser = users.save(user);
+        if (regUser.isEmpty()) {
+            return "redirect:/reg?fail=true";
+        }
         return "redirect:/login";
     }
 
     @GetMapping("/reg")
-    public String regPage() {
+    public String regPage(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
+        model.addAttribute("fail", fail != null);
         return "reg";
     }
 }

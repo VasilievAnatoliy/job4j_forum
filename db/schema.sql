@@ -13,6 +13,3 @@ CREATE TABLE IF NOT EXISTS comments (
     user_id INT NOT NULL REFERENCES users(id),
     post_id INT NOT NULL REFERENCES posts(id)
 );
-
-insert into posts (name) values ('О чем этот форум?');
-insert into posts (name) values ('Правила форума.');
